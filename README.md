@@ -11,7 +11,7 @@ This tool analyzes the given font and draws and finds the best possible width fo
 If `width` parameter is given, this is used instead of analyzed width value.
 
 ```python
-py .\main.py --font .\font\UbuntuMono-Bold.ttf --height 64 --margin-vertical 1 --margin-horizontal 2
+py .\main.py --font .\font\Helvetica-Monospaced-W06-Rg.ttf --height 64 --margin-vertical 1 --margin-horizontal 1
 ```
 
 ## How it works
