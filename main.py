@@ -141,10 +141,10 @@ def main(output, fontFile, width, height, marginVertical, marginHorizontal):
 #include <pgmspace.h>
 #endif
 
-const uint8_t Font{height}_Table [] {{
+const uint8_t Font{height}_Table [] = {{
 """
 
-  postlines = f"""}}
+  postlines = f"""}};
 
 sFONT Font24 = {{
   Font{height}_Table,
