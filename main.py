@@ -146,7 +146,7 @@ const uint8_t Font{height}_Table [] = {{
 
   postlines = f"""}};
 
-sFONT Font24 = {{
+sFONT Font{height} = {{
   Font{height}_Table,
   {imageWidth}, /* Width */
   {imageHeight}, /* Height */
