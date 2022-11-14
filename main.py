@@ -1,4 +1,3 @@
-import sys
 from os import path
 from math import ceil
 import argparse
@@ -25,7 +24,7 @@ class ImageAnalyzer:
 
   # Returns char start from left to right, top to bottom
   def analyzeImage(self, im):
-    dim = Dimensions(sys.maxsize, 0, 0, sys.maxsize)
+    dim = Dimensions(im.height, 0, 0, im.width)
     for y in range(im.height):
       for x in range(im.width):
         if self.getBlackWhiteFromPixel( im.getpixel((x, y)) ) == 1:
@@ -35,16 +34,16 @@ class ImageAnalyzer:
           dim.left = min(dim.left, x)
           dim.right = max(dim.right, x)
 
-    return dim if dim.top != sys.maxsize else Dimensions(0, 0, 0, 0)
+    return dim
 
   def analyze(self, fontFile, width, height, marginVertical, marginHorizontal):
     # Assuming width is always smaller than height
     imageHeight = height * 2
     imageWidth = width * 2 if width != -1 else imageHeight
 
-    prevDims = (0, Dimensions(0, 0, 0, 0))
+    prevDims = (0, Dimensions(imageHeight, 0, 0, imageWidth))
     for fontSize in range(2, int(height * 8)):
-      maxDims = Dimensions(sys.maxsize, 0, 0, sys.maxsize)
+      maxDims = Dimensions(imageHeight, 0, 0, imageWidth)
       for chars in FontTableCharacters.range:
         im = Image.new(mode = 'L', size = (imageWidth, imageHeight), color = 255)
         font = ImageFont.truetype(fontFile, size = fontSize)
@@ -98,6 +97,8 @@ class ImageAnalyzer:
 
       lst = self.getBinary(im)
 
+      # im.save(f'./deneme/image-{chars}.jpg')
+
       lines.append(f'// @{int((chars - FontTableCharacters.start) * height * width / 8)} \'{chr(chars)}\' ({dim.right - dim.left} pixels wide)')
       for l in lst:
         numbers = ', '.join(l[0])
@@ -120,7 +121,7 @@ def main(output, fontFile, width, height, marginVertical, marginHorizontal):
 
   fontWidth = dims.right - dims.left
   bestWidth = ceil((fontWidth + 2 * marginHorizontal) / 8) * 8
-  print(f'[INFO] Best possible width for the font is: {bestWidth}')
+  print(f'[INFO] Best possible width for the font is: {bestWidth} (actual font size is {fontWidth})')
 
   imageWidth = bestWidth if width == -1 else width
   imageHeight = height
