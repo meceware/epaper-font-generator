@@ -81,7 +81,7 @@ class ImageAnalyzer:
       lst.append((numbers, comment))
     return lst
 
-  def generate(self, width, height, fontFile, fontSize, top):
+  def generate(self, fontWidth, width, height, fontFile, fontSize, top):
     lines = list()
 
     font = ImageFont.truetype(fontFile, size = fontSize)
@@ -93,7 +93,7 @@ class ImageAnalyzer:
 
       im = Image.new(mode = 'L', size = (width, height), color = 255)
       imText = ImageDraw.Draw(im)
-      imText.text(((width - dim.right + dim.left) / 2 - dim.left, top), chr(chars), fill = 0, font = font, align = 'left')
+      imText.text(((fontWidth - dim.right + dim.left) / 2 - dim.left, top), chr(chars), fill = 0, font = font, align = 'left')
 
       lst = self.getBinary(im)
 
@@ -121,7 +121,7 @@ def main(output, fontFile, width, height, marginVertical, marginHorizontal):
 
   fontWidth = dims.right - dims.left
   bestWidth = ceil((fontWidth + 2 * marginHorizontal) / 8) * 8
-  print(f'[INFO] Best possible width for the font is: {bestWidth} (actual font size is {fontWidth})')
+  print(f'[INFO] Best possible width for the font is: {fontWidth} (actual font size is {bestWidth})')
 
   imageWidth = bestWidth if width == -1 else width
   imageHeight = height
@@ -149,11 +149,11 @@ const uint8_t Font{height}_Table [] = {{
 
 sFONT Font{height} = {{
   Font{height}_Table,
-  {imageWidth}, /* Width */
+  {fontWidth}, /* Width */
   {imageHeight}, /* Height */
 }};"""
 
-  lines = analyzer.generate(imageWidth, imageHeight, fontFile, fontSize, marginVertical - dims.top)
+  lines = analyzer.generate(fontWidth, imageWidth, imageHeight, fontFile, fontSize, marginVertical - dims.top)
   with open(output, 'w', encoding = 'utf-8') as f:
     f.writelines(prelines)
     f.writelines(f'  {s}\n' for s in lines)
